@@ -1,0 +1,19 @@
+---
+- name: Simulate EC2 provisioning
+  hosts: ec2_instances
+  gather_facts: false
+
+  tasks:
+    - name: Create a project folder
+      file:
+        path: "{{ playbook_dir }}/../simulated_ec2_project"
+        state: directory
+
+    - name: Create a sample file
+      copy:
+        content: "Hello from simulated EC2!"
+        dest: "{{ playbook_dir }}/../simulated_ec2_project/hello.txt"
+
+    - name: Display a message
+      debug:
+        msg: "Configuration complete on {{ inventory_hostname }}"

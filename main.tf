@@ -33,7 +33,7 @@ resource "null_resource" "example_ec2" {
   }
 
   provisioner "local-exec" {
-    command = "echo 'Simulating EC2 instance creation...'"
+    command = "ansible-playbook -i ansible/inventory.ini ansible/setup_ec2.yml"
   }
 }
 
