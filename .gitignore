@@ -1,0 +1,39 @@
+# === Terraform ===
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files (contain sensitive data)
+*.tfstate
+*.tfstate.*
+
+# Crash logs
+crash.log
+
+# Terraform variable files with secrets
+*.tfvars
+*.tfvars.json
+
+# Override files (local-only configurations)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Lock file (optional to ignore, keeps provider versions)
+.terraform.lock.hcl
+
+# Backup files
+*.backup
+*.bak
+
+# === macOS ===
+.DS_Store
+
+# === IDE / Editor Files ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === Checkov ===
+.checkov_report*.json
