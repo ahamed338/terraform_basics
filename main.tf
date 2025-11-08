@@ -1,28 +1,39 @@
-terraform {
-  required_version = ">= 1.0.0"
+resource "aws_key_pair" "deployer" {
+  key_name   = "deployer-key"
+  public_key = file("/Users/noorahamed/.ssh/id_rsa.pub")
 }
 
-provider "aws" {
-  region = "us-east-1"
-}
 
-resource "aws_instance" "example" {
-  ami           = "ami-12345678"
-  instance_type = "t2.micro"
-  ebs_optimized = true
-  monitoring    = true
+resource "aws_security_group" "allow_ssh" {
+  name        = "allow_ssh"
+  description = "Allow SSH inbound traffic"
 
-  metadata_options {
-    http_tokens = "required"
+  ingress {
+    description = "Allow inbound SSH from specific IP"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["49.207.144.127/32"]
   }
 
-  root_block_device {
-    encrypted = true
-  }
-
-  iam_instance_profile = "fake-instance-role"
-
-  tags = {
-    Name = "ExampleServer"
+  egress {
+    description = "Allow all outbound traffic to specific IP"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["49.207.144.127/32"]
   }
 }
+
+resource "null_resource" "example_ec2" {
+  triggers = {
+    key_pair   = aws_key_pair.deployer.id
+    sg         = aws_security_group.allow_ssh.id
+    iam_profile = aws_iam_instance_profile.ec2_profile.id
+  }
+
+  provisioner "local-exec" {
+    command = "echo 'Simulating EC2 instance creation...'"
+  }
+}
+
